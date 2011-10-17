@@ -1,4 +1,4 @@
-Chiropractor.js
+# Chiropractor.js
 
 ### Error Handling made easier for Backbone.js
 ====================
@@ -7,6 +7,13 @@ Chiropractor aims to aleviate the pains of handling different error status codes
 
 Usage
 ---------------------
+
+Chiropractor is based on the concept that in general there is generic behaviour for different error codes.
+
+For example, you may want to display a page not found for a 404, a server error page for a 500 etc.
+
+It still, however, recognises that certain server calls will require specific behaviour and as such allows you to define
+these handlers at the time the server call is made (i.e. model.save())
 
 ##Generic handlers
 ---------------------
@@ -75,7 +82,7 @@ any default behaviour declared in the chiropractor.init.
 ---------------------
 
 If you still require specific behaviour for that model/collection, but you want to use the default behaviour
-declared in the initalize, you have the option to pass in pre/post hooks
+declared in the chiropractor.init, you have the option to pass in pre/post hooks.
 
 Prehooks are defined as follows:
 
@@ -113,11 +120,13 @@ Note: dont try both. Currently Error will take precendance. Pre & Post hooks wil
 Currently Supported Methods
 ---------------------
 
-Models:
+Models
+
 * save
 * fetch
 
-Collection
+Collections
+
 * fetch
 * create (will automatically crate chiropractor models)
 

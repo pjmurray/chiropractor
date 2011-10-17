@@ -99,7 +99,7 @@ And post_hooks are either:
 ```javascript
 model.save({}, {
   post_hook: function () {
-    //Do something before a generic handler
+    //Do something after a generic handler
   }
 });
 ```

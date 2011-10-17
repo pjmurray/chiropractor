@@ -9,8 +9,8 @@ var chiropractor = (function () {
   var buildOptions = function (options) {
 
     if (options !== undefined) {
-      var postHook = options.error || options['post_hook'];
-      var preHook = options['pre_hook'];
+      var postHook = options.error || options['post_error'];
+      var preHook = options['pre_error'];
     } else {
       options = {}
     }
@@ -44,7 +44,6 @@ var chiropractor = (function () {
       var status = parseInt(resp.status);
 
       if (handlerCallbacks[status] === undefined || (status == 0 && !unloading)) {
-        console.log(handlerCallbacks)
         handlerCallbacks[defaultStatus](model, resp, options);
 
       } else if (status !== 0) {

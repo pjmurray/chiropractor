@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d7805e2a-008c-4563-94e6-d8f5b5a48ed1" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/chiropractor.js" afterPath="$PROJECT_DIR$/js/chiropractor.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/spec/chiropractor-spec.js" afterPath="$PROJECT_DIR$/spec/chiropractor-spec.js" />
@@ -38,19 +36,28 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="chiropractor-spec.js" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="chiropractor-spec.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/spec/chiropractor-spec.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="65" column="10" selection-start="1782" selection-end="1826" vertical-scroll-proportion="0.0">
+            <state line="11" column="0" selection-start="242" selection-end="242" vertical-scroll-proportion="0.32884902">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="chiropractor.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="chiropractor.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/chiropractor.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="51" column="16" selection-start="1451" selection-end="1451" vertical-scroll-proportion="0.79268295">
+            <state line="86" column="26" selection-start="2426" selection-end="2426" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="underscore.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/underscore.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="101" column="21" selection-start="3776" selection-end="3779" vertical-scroll-proportion="-7.4615383">
               <folding />
             </state>
           </provider>
@@ -59,7 +66,7 @@
       <file leaf-file-name="backbone.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/backbone.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="880" column="23" selection-start="32568" selection-end="32568" vertical-scroll-proportion="0.0">
+            <state line="535" column="14" selection-start="19101" selection-end="19101" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -81,8 +88,8 @@
       <list>
         <option value="$PROJECT_DIR$/spec/SpecRunner.html" />
         <option value="$PROJECT_DIR$/js/backbone.js" />
-        <option value="$PROJECT_DIR$/spec/chiropractor-spec.js" />
         <option value="$PROJECT_DIR$/js/chiropractor.js" />
+        <option value="$PROJECT_DIR$/spec/chiropractor-spec.js" />
       </list>
     </option>
   </component>
@@ -112,6 +119,8 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Favorites" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -182,8 +191,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="Favorites" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -260,16 +267,16 @@
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3286424" sideWeight="0.0" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3286424" sideWeight="0.0" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -323,23 +330,30 @@
         <state line="13" column="44" selection-start="685" selection-end="685" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/backbone.js">
+    <entry file="file://$PROJECT_DIR$/underscore.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="880" column="23" selection-start="32568" selection-end="32568" vertical-scroll-proportion="0.0">
+        <state line="101" column="21" selection-start="3776" selection-end="3779" vertical-scroll-proportion="-7.4615383">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/spec/chiropractor-spec.js">
+    <entry file="file://$PROJECT_DIR$/js/backbone.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="65" column="10" selection-start="1782" selection-end="1826" vertical-scroll-proportion="0.0">
+        <state line="535" column="14" selection-start="19101" selection-end="19101" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/chiropractor.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="51" column="16" selection-start="1451" selection-end="1451" vertical-scroll-proportion="0.79268295">
+        <state line="86" column="26" selection-start="2426" selection-end="2426" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/spec/chiropractor-spec.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="0" selection-start="242" selection-end="242" vertical-scroll-proportion="0.32884902">
           <folding />
         </state>
       </provider>

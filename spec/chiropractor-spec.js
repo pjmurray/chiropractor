@@ -1,224 +1,324 @@
 describe("Chiropractor", function () {
 
-  function serverCall(subject, status) {
-    var ajaxCall = spyOn(jQuery, 'ajax');
+      function getParams(subject) {
+        var ajaxCall = spyOn(jQuery, 'ajax');
 
-    subject();
+        subject();
 
-    var params = ajaxCall.mostRecentCall.args[0];
-    params.error({status: status.toString()});
-  }
+        return ajaxCall.mostRecentCall.args[0];
+      }
 
-  describe("when initialized with chiro.use", function () {
-    describe("models", function () {
-      var model, view, errorCallback, differentErrorCallback;
+      function serverCall(subject, status) {
+        var params = getParams(subject);
+        params.error({status: status.toString()});
+      }
 
-      describe("when things happen in order", function () {
+      function expectChiroBehaviour(subject, modelModification) {
 
-        beforeEach(function () {
-          errorCallback = jasmine.createSpy('generic 500 error');
-          differentErrorCallback = jasmine.createSpy('generic 404 error');
-          chiropractor.init(
-              500, //default status code
-              [404, 420, 500], //all accepted codes
-              {
-                500: errorCallback, //generic error handling functions
-                404: differentErrorCallback
-              }
-          );
-          var Model = Backbone.Model.extend({
-            initialize: function () {
-            },
-            url: function () {
-              return "test"
-            }
-          });
-          var View = Backbone.View.extend({
-            initialize: function () {
-              chiropractor.use(model);
-            }
-          });
-          model = new Model();
-          view = new View({model: model})
-        });
+        var aGeneric = 404;
+        var theDefault = 500;
+        var specific = 420;
+        var notInValids = 501;
 
-        describe("default behaviour", function () {
-          it("should default to what it is initialized with", function () {
-            serverCall(function () {
-              model.save();
-            }, 501);
-            expect(errorCallback).toHaveBeenCalled();
-          });
-        });
+        return function () {
+          describe("models", function () {
+            var model, defaultHandler, genericHandler, opts;
 
-        describe("generic behaviour", function () {
-          it("should perform the provided behaviour", function () {
-
-            serverCall(function () {
-              model.save();
-            }, 500);
-            expect(errorCallback).toHaveBeenCalled();
-
-          });
-          it("should work with any status code", function () {
-
-            serverCall(function () {
-              model.save();
-            }, 404);
-            expect(differentErrorCallback).toHaveBeenCalled();
-
-          });
-        });
-
-        describe("specific behaviour", function () {
-          var specificCallback;
-          it("should override the defaults", function () {
-            specificCallback = jasmine.createSpy('specific 500 error');
-            serverCall(function () {
-              model.save({}, {500: specificCallback});
-            }, 500);
-
-            expect(specificCallback).toHaveBeenCalled();
-          });
-
-          it("should call the right function", function () {
-            specificCallback = jasmine.createSpy('specific 420 error');
-            serverCall(function () {
-              model.save({}, {
-                500: function () {
-                },
-                420: specificCallback
-              });
-            }, 420);
-
-            expect(specificCallback).toHaveBeenCalled();
-          });
-
-
-        });
-
-        describe("generic behaviour hooks", function () {
-
-
-          describe("post hook", function () {
-            var post_hook;
-
-            beforeEach(function () {
-              post_hook = jasmine.createSpy('generic post error function');
-            });
-
-            it("should get called when defined as error", function () {
-              serverCall(function () {
-                model.save({}, {error: post_hook});
-              }, 500);
-
-              expect(post_hook).toHaveBeenCalled();
-            });
-
-            it("should get called when defined as post_error", function () {
-              serverCall(function () {
-                model.save({}, {post_error: post_hook});
-              }, 500);
-
-              expect(post_hook).toHaveBeenCalled();
-            });
-
-            it("should get called before the generic handler", function () {
-              var someVariable;
-              chiropractor.init(
-                  500, [500], { 500: function () {
-                    someVariable = 2;
+            describe("save", function () {
+              var method;
+              beforeEach(function () {
+                defaultHandler = jasmine.createSpy('generic 500 error');
+                genericHandler = jasmine.createSpy('generic 404 error');
+                var generics = {};
+                generics[theDefault] = defaultHandler;
+                generics[aGeneric] = genericHandler;
+                subject(
+                    theDefault, //default status code
+                    [aGeneric, specific, theDefault], //all accepted codes
+                    generics
+                );
+                var Model = Backbone.Model.extend({
+                  url: function () {
+                    return "test"
                   }
+                });
+                model = new Model();
+                modelModification(model);
+                method = model.save;
+                opts = {};
+              });
+
+
+              function runMethodForErrorCode(code) {
+
+                serverCall(function () {
+                  method.call(model, {}, opts)
+                }, code);
+              }
+
+              describe("default handler", function () {
+
+                describe('when the status is not in validCodes', function () {
+                  it("should be called", function () {
+                    runMethodForErrorCode(notInValids);
+                    expect(defaultHandler).toHaveBeenCalled();
                   });
-              serverCall(function () {
-                model.save({}, {post_error: function () {
-                  someVariable = someVariable + 1;
-                } });
-              }, 500);
-              expect(someVariable).toEqual(3);
+                });
+
+                describe('when there is no specific or generic handler for the status', function () {
+                  it("should be called", function () {
+                    runMethodForErrorCode(specific);
+                    expect(defaultHandler).toHaveBeenCalled();
+                  });
+                });
+              });
+
+              describe("generic handlers", function () {
+                it("should perform the provided behaviour", function () {
+                  runMethodForErrorCode(theDefault);
+                  expect(defaultHandler).toHaveBeenCalled();
+                });
+
+                it("should work with any status code", function () {
+                  runMethodForErrorCode(aGeneric);
+                  expect(genericHandler).toHaveBeenCalled();
+                });
+              });
+
+              describe("specific handlers", function () {
+                var specificHandler;
+                beforeEach(function () {
+                  specificHandler = jasmine.createSpy('specific error');
+                });
+
+                it("should override a generic handler", function () {
+                  opts[aGeneric] = specificHandler;
+                  runMethodForErrorCode(aGeneric);
+                  expect(specificHandler).toHaveBeenCalled();
+                });
+
+                it("should override the default handler", function () {
+                  opts[theDefault] = specificHandler;
+                  runMethodForErrorCode(notInValids);
+                  expect(specificHandler).toHaveBeenCalled();
+                });
+              });
+
+              describe("hooks", function () {
+
+                describe("post hook", function () {
+                  var postHook;
+
+                  beforeEach(function () {
+                    postHook = jasmine.createSpy('generic post error function');
+                    opts['post_error'] = postHook;
+                  });
+
+                  it("should get called", function () {
+                    runMethodForErrorCode(theDefault);
+                    expect(postHook).toHaveBeenCalled();
+                  });
+
+                  it("should get called before the generic handler", function () {
+                    var someVariable;
+                    var generics = {};
+                    generics[theDefault] = function () {
+                      someVariable = 2;
+                    }
+                    subject(theDefault, [theDefault], generics);
+                    opts['post_error'] = function () {
+                      someVariable = someVariable + 1;
+                    };
+                    runMethodForErrorCode(theDefault);
+                    expect(someVariable).toEqual(3);
+
+                  });
+
+                  it("should not get called when a specific handler is called", function () {
+                    opts[specific] = function () {};
+                    runMethodForErrorCode(specific);
+                    expect(postHook).not.toHaveBeenCalled();
+                  });
+
+                });
+
+                describe("pre hook", function () {
+                  var preHook;
+
+                  beforeEach(function () {
+                    preHook = jasmine.createSpy('generic pre error function');
+                    opts['pre_error'] = preHook;
+                  });
+
+
+                  it("should get called when defined as pre_error", function () {
+                    runMethodForErrorCode(theDefault);
+                    expect(preHook).toHaveBeenCalled();
+                  });
+
+                  it("should get called after the generic handler", function () {
+                    var someVariable;
+                    var generics = {};
+                    generics[theDefault] = function () {
+                      someVariable = someVariable + 2;
+                    };
+                    subject(theDefault, [theDefault], generics);
+                    opts['pre_error'] = function () {
+                      someVariable = 1;
+                    };
+                    runMethodForErrorCode(theDefault);
+                    expect(someVariable).toEqual(3);
+
+                  });
+
+                  it("should not get called when a specific handler is called", function () {
+                    opts[specific] = function () {};
+                    runMethodForErrorCode(specific);
+                    expect(preHook).not.toHaveBeenCalled();
+                  });
+                });
+              });
+
+              describe('error', function () {
+              var errorHandler;
+
+              beforeEach(function () {
+                errorHandler = jasmine.createSpy('error handler');
+                opts['error'] = errorHandler;
+              });
+
+              it('should not run the preHook', function () {
+
+              });
+
+              it('should not run the postHook', function () {
+
+              });
+
+              it("should be run instead of the default", function () {
+                runMethodForErrorCode(theDefault);
+                expect(errorHandler).toHaveBeenCalled();
+                expect(defaultHandler).not.toHaveBeenCalled();
+              });
+
+              it("should be run instead of a generic", function () {
+                runMethodForErrorCode(aGeneric);
+                expect(errorHandler).toHaveBeenCalled();
+                expect(genericHandler).not.toHaveBeenCalled();
+              });
+
+              it("should be run instead of a specifc", function () {
+                var specificHandler = jasmine.createSpy('specifc error function');
+                  opts[specific] = specificHandler;
+                runMethodForErrorCode(specific);
+
+                expect(errorHandler).toHaveBeenCalled();
+                expect(specificHandler).not.toHaveBeenCalled();
+              });
+            });
 
             });
 
-            it("should not get called when a specific handler is called", function () {
-              serverCall(function () {
-                model.save({}, {420: function () {
-                }, post_error: post_hook});
-              }, 420);
 
-              expect(post_hook).not.toHaveBeenCalled();
+//
+            describe("when the init happens after the use call", function () {
+              it("should still work", function () {
+                defaultHandler = jasmine.createSpy('error');
+
+                var Model = Backbone.Model.extend({
+                  url: function () {
+                    return "test"
+                  }
+                });
+                model = new Model();
+                modelModification(model);
+                chiropractor.each(500, [500], {500: defaultHandler});
+                serverCall(function () {
+                  model.save();
+                }, 500);
+                expect(defaultHandler).toHaveBeenCalled();
+              });
             });
 
           });
 
-          describe("pre hook", function () {
-            it("should get called when defined as pre_error", function () {
-              var pre_hook = jasmine.createSpy('generic post error function');
+          describe("collections", function () {
+            var collection;
+            beforeEach(function () {
+              errorCallback = jasmine.createSpy('500 error');
+              chiropractor.each(500, [500], {500: errorCallback});
+              var Collection = Backbone.Collection.extend({
+                url: function () {
+                  return "test"
+                }
+              });
+              collection = new Collection();
+              modelModification(collection);
+            });
 
+
+            it("should default to 500", function () {
               serverCall(function () {
-                model.save({}, {pre_error: pre_hook});
-              }, 500);
+                collection.fetch()
+              }, notInValids);
+              expect(errorCallback).toHaveBeenCalled();
+            });
 
-              expect(pre_hook).toHaveBeenCalled();
+
+            it("should work with create when not passed an existing backbone model", function () {
+              serverCall(function () {
+                collection.create({});
+              }, notInValids);
+              expect(errorCallback).toHaveBeenCalled();
+            });
+
+          });
+        }
+      }
+
+      describe("#all", expectChiroBehaviour(chiropractor.all, function () {
+      }));
+
+      describe("#each", function () {
+        describe('with #use', expectChiroBehaviour(chiropractor.each, function (object) {
+          chiropractor.use(object);
+        }));
+
+        describe('without anything', function () {
+          describe('model#save', function () {
+            it("should be unchanged", function () {
+              chiropractor.each(500, [], {});
+              var model = new Backbone.Model({});
+              expect(model.save).toEqual(Backbone.Model.prototype.save);
             });
           });
+        })
+
+
+      });
+
+      describe('oneOff', function () {
+        describe('with #each', function () {
+          it("should return the error handler", function () {
+
+          })
         });
       });
 
-      describe("when the init happens after the use call", function () {
-        it("should still work", function () {
-          errorCallback = jasmine.createSpy('500 error');
 
-          var Model = Backbone.Model.extend({
-            initialize: function () {
-              chiropractor.use(this);
-            },
-            url: function () {
-              return "test"
-            }
-          });
-          model = new Model();
-          chiropractor.init(500, [500], {500: errorCallback});
-          serverCall(function () {
-            model.save();
-          }, 500);
-          expect(errorCallback).toHaveBeenCalled();
-        });
-      });
-    });
+    }
 
-    describe("collections", function () {
-      var collection;
-      beforeEach(function () {
-        errorCallback = jasmine.createSpy('500 error');
-        chiropractor.init(500, [500], {500: errorCallback});
-        var Collection = Backbone.Collection.extend({
-          initialize: function () {
-            chiropractor.use(this);
-          },
-          url: function () {
-            return "test"
-          }
-        });
-        collection = new Collection();
-      });
+)
+    ;
+//
+//function test (fn) {
+//  return function () {
+//  it("should work", function () {
+//  expect(fn()).toEqual(7)
+//    });
+//    }
+//}
 
-
-      it("should default to 500", function () {
-        serverCall(function () {
-          collection.fetch();
-        }, 501);
-        expect(errorCallback).toHaveBeenCalled();
-      });
-
-
-      it("should work with create when not passed an existing backbone model", function () {
-        serverCall(function () {
-          collection.create({});
-        }, 501);
-        expect(errorCallback).toHaveBeenCalled();
-      });
-
-    });
-  });
-
-});
+//describe("testing", test(function () {
+//  return 7
+//}))

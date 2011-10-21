@@ -24,7 +24,7 @@ var jQuery = (function() {
 // Define a local copy of jQuery
 var jQuery = function( selector, context ) {
 		// The jQuery object is actually just the init constructor 'enhanced'
-		return new jQuery.fn.init( selector, context, rootjQuery );
+		return new jQuery.fn.each( selector, context, rootjQuery );
 	},
 
 	// Map over jQuery in case of overwrite
@@ -99,7 +99,7 @@ var jQuery = function( selector, context ) {
 
 jQuery.fn = jQuery.prototype = {
 	constructor: jQuery,
-	init: function( selector, context, rootjQuery ) {
+	each: function( selector, context, rootjQuery ) {
 		var match, elem, ret, doc;
 
 		// Handle $(""), $(null), or $(undefined)
@@ -321,7 +321,7 @@ jQuery.fn = jQuery.prototype = {
 };
 
 // Give the init function the jQuery prototype for later instantiation
-jQuery.fn.init.prototype = jQuery.fn;
+jQuery.fn.each.prototype = jQuery.fn;
 
 jQuery.extend = jQuery.fn.extend = function() {
 	var options, name, src, copy, copyIsArray, clone,
@@ -869,21 +869,21 @@ jQuery.extend({
 
 	sub: function() {
 		function jQuerySub( selector, context ) {
-			return new jQuerySub.fn.init( selector, context );
+			return new jQuerySub.fn.each( selector, context );
 		}
 		jQuery.extend( true, jQuerySub, this );
 		jQuerySub.superclass = this;
 		jQuerySub.fn = jQuerySub.prototype = this();
 		jQuerySub.fn.constructor = jQuerySub;
 		jQuerySub.sub = this.sub;
-		jQuerySub.fn.init = function init( selector, context ) {
+		jQuerySub.fn.each = function init( selector, context ) {
 			if ( context && context instanceof jQuery && !(context instanceof jQuerySub) ) {
 				context = jQuerySub( context );
 			}
 
-			return jQuery.fn.init.call( this, selector, context, rootjQuerySub );
+			return jQuery.fn.each.call( this, selector, context, rootjQuerySub );
 		};
-		jQuerySub.fn.init.prototype = jQuerySub.fn;
+		jQuerySub.fn.each.prototype = jQuerySub.fn;
 		var rootjQuerySub = jQuerySub(document);
 		return jQuerySub;
 	},

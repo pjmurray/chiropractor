@@ -5,15 +5,45 @@ var chiropractor = (function () {
   var allCodes;
   var unloading;
 
+  var setVariables = function (args) {
+    defaultStatus = args[0];
+    allCodes = args[1];
+    genericHandlers = args[2];
+  };
 
-  var buildOptions = function (options) {
+  var apply = function (object) {
+    _(['save', 'destroy', 'fetch']).each(function (method) {
+      wrapError(object, method);
+    });
+  };
 
+  var wrapError = function (object, method) {
+    if (object[method]) {
+      var clone;
+      clone = object[method];
+      object[method] = function (attrs, options) {
+        var opts = buildOptions(options);
+        var args = {
+          'save': [attrs, opts],
+          'fetch': [opts],
+          'destroy': [opts]
+        };
+        clone.apply(this, args[method]);
+      };
+    }
+  };
+
+   var buildOptions = function (options) {
     if (options !== undefined) {
-      var postHook = options.error || options['post_error'];
+      var override = options.error;
+      var postHook = options['post_error'];
       var preHook = options['pre_error'];
     } else {
       options = {}
     }
+     if (override) {
+       return options
+     }
 
     var specificHandler = {};
 
@@ -44,7 +74,7 @@ var chiropractor = (function () {
       var status = parseInt(resp.status);
 
       if (handlerCallbacks[status] === undefined || (status == 0 && !unloading)) {
-        handlerCallbacks[defaultStatus](model, resp, options);
+          handlerCallbacks[defaultStatus](model, resp, options);
 
       } else if (status !== 0) {
         handlerCallbacks[status](model, resp, options);
@@ -53,39 +83,31 @@ var chiropractor = (function () {
     return options;
   };
 
+  var bindUnloadNuance = function () {
+    $(window).live('beforeunload', function () {
+      unloading = true;
+    })
+  };
 
   return {
-    init: function (defaultCode, codes, defaults) {
-      allCodes = codes;
-      defaultStatus = defaultCode;
-      genericHandlers = defaults;
+    all: function () {
+      setVariables(arguments);
+      apply(Backbone.Model.prototype);
+      apply(Backbone.Collection.prototype);
+      bindUnloadNuance();
+    },
 
-      $(window).live('beforeunload', function () {
-        unloading = true;
-      })
+    each: function () {
+      setVariables(arguments);
+      bindUnloadNuance();
     },
 
     use: function (object) {
-      var save = object.save;
-      if (save) {
-        object.save = function (attrs, options) {
-          var opts = buildOptions(options);
-          save.call(object, attrs, opts);
-        };
-      }
-      var fetch = object.fetch;
-      object.fetch = function (options) {
-        fetch.call(object, buildOptions(options));
-      };
+      apply(object);
+    },
 
-      var prepareModel = object._prepareModel;
-      if(prepareModel) {
-        object._prepareModel = function (model, options) {
-          var newModel = prepareModel.call(object, model, options);
-          chiropractor.use(newModel);
-          return newModel;
-        }
-      }
+    explicit: function () {
+
     }
   }
 })();

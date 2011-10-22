@@ -1,0 +1,52 @@
+because it doesn't trigger change always, so we would have to both intercept the errors set on the save calls AND the call to Backbone sync. Otherwise, we run the risk of binding to a event that doesn't always get called.
+
+We could squash the binding on the error event, forcing the developer to use the chiropractor convention. 
+
+We are essentially binding to the contract that we will use the dsl when passing in the otions object for any model/collection that is either initialized with Chiro, or enforced to use Chiro with the #all method.
+
+The rules can be summized as follows:
+
+var model = new Backbone.Model({});
+var collection = new Backbone.Collection({});
+var options: {
+	success: function () {
+	//Behaves normally
+	},
+	400: function () { //400, or any number within chiropractor.validCodes() (set when initialized)
+	//do specific error behaviour for 400. This will NOT call the 400 function (if defined) within 		 			  	
+	//chiropractor.defaults() (set when initalized)
+	},
+	error: function () {
+	//DONT use Chiropractor, behave as expected
+	},
+	preHook: function () {
+	//behaviour to do before any default handler is run
+	}
+	postHook: function () {
+	//called after a default handler
+	}
+}
+
+model.save({}, options)
+model.fetch({}, options)
+model.destroy{}, options)
+
+collection.fetch({}, options)
+
+Obviously, declaring anything else than an error is a bad idea. This does run the risk of causing issues if the team is not all aware of such nuance/convenience. //TODO: implement an override to set error as pre or post hook
+
+
+
+defaultCode: 
+
+If: 
+a) the resp code is not defined in validCodes, or
+b) there is no specific or generic function specified.
+
+
+That is to say, any code we want to ever handle MUST be declared in validCodes or the function for the defaultCode will be run. This will be wrapped in pre and post hook calls (if defined) UNLESS a more specific 500 handler has been passed in (im not sure about this, if anyone has opinions on the behaviour please ping me, pj.murray.nz@gmail.com )
+
+
+NICE TO HAVE:
+	Pattern Matching in codes		
+	Around hook???

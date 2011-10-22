@@ -13,14 +13,13 @@ describe("Chiropractor", function () {
         params.error({status: status.toString()});
       }
 
-      function expectChiroBehaviour(subject, modelModification) {
+      function sharedBehaviourForMethod(subject, modelModification) {
 
         var aGeneric = 404;
         var theDefault = 500;
         var specific = 420;
         var notInValids = 501;
 
-        return function () {
           describe("models", function () {
             var model, defaultHandler, genericHandler, opts;
 
@@ -273,17 +272,18 @@ describe("Chiropractor", function () {
             });
 
           });
-        }
       }
 
-      describe("#all", expectChiroBehaviour(chiropractor.all, function () {
-      }));
+      describe("#all", function () { 
+        sharedBehaviourForMethod(chiropractor.all, function () {
+      });
+      });
 
       describe("#each", function () {
-        describe('with #use', expectChiroBehaviour(chiropractor.each, function (object) {
+        describe('with #use', function () { sharedBehaviourForMethod(chiropractor.each, function (object) {
           chiropractor.use(object);
-        }));
-
+        });
+        });
         describe('without anything', function () {
           describe('model#save', function () {
             it("should be unchanged", function () {

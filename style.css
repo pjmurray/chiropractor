@@ -9,6 +9,9 @@ body {
   line-height: 22px;
   font-family: Helvetica Neue, Helvetica, Arial;
 }
+/*ul {*/
+  /*list-style:  none;*/
+/*}*/
 
 .chapter {
   margin-left: 6px;
@@ -48,12 +51,12 @@ pre, .code {
   float: left;
   width: 600px;
   padding: 20px;
-  padding-right: 30px;
+  padding-right: 10px;
 }
 
 .summary {
   float: right;
-  width: 260px;
-  padding: 20px 0 20 40;
+  width: 290px;
+  padding: 10px 0 20 40;
 }
 

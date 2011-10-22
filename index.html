@@ -51,16 +51,15 @@
 
       <p>
       <ul>
-        <li>All: will override all Models and Collection, leaving you only to worry about errors
-          you don't want Chiropractor to handle.
+        <li>All: will override all Models and Collection, leaving you only to worry about specificHandlers.
         </li>
-        <li>Each: will do nothing until the model is passed to chiropractor thrrough #use, or an explicit call to
+        <li>Each: will do nothing until the model is passed to chiropractor hrrough #use, or an explicit call to
           chiropractor.oneOff
         </li>
       </ul>
 
       <p>
-        Regardless of using all or each the initialization is the same. We initialize as follows:
+        Regardless of using all or each the initialization is the same.
       </p>
 
     <pre>
@@ -84,19 +83,16 @@
 
       <h3>validCodes</h3>
 
-      <p>This is an array of codes that you want Chiropractor to keep and eye out for. This must be a comprehensive list
-        of
-        any handlers declared in your application</p>
+      <p>This is an array of codes that you want Chiropractor to keep an eye out for. This must be a comprehensive list
+        of any handlers declared in your application</p>
 
       <h3>genericHandlers</h3>
 
       <p>
         These are the default handlers that Chiropractor will use for particular error codes when there is not a
-        specific
-        handler declared for that call.
+        specific handler declared for that call.
         It is an object, with each property being a mapping between a status code, and the corresponding default
-        behaviour
-        for that case
+        behaviour for that response status code.
       </p>
     </div>
     <!--<h2>Chiropractor.all</h2>-->
@@ -139,14 +135,14 @@
   });
 </pre>
       Specific handlers (i.e. those declared at the point of the server call) will be called instead of
-      any default behaviour declared in the chiropractor.init.
+      any default behaviour declared in the chiropractor.init().
 
 
     </div>
     <h2>Affected Method</h2>
 
     <div class='chapter'>
-      <p>Chiropractor will modify the following methods</p>
+      <p>Chiropractor will modify the following methods:</p>
       <ul>
         <li>Backbone.Model#save</li>
         <li>Backbone.Model#fetch</li>
@@ -156,6 +152,18 @@
       </ul>
 
     </div>
+
+    <h2>Leaving a page on an outstanding request vs. Server Connection Refused</h2>
+
+    <div class='chapter'>
+      <p>Unfortunately, both of these will return the same response. To handle this, Chiropractor binds to the
+      window.unload event and checks against this when there is an error. Nothing will be called when navigating away.
+        When a connection is refused (i.e. your server isn't running), chiropractor will run as normal.
+      </p>
+      <p> If you want to handle the specific case of a connection refused, please declare a handler for a 0 status code
+        and include it in the validCodes array.
+      </p>
+      </div>
     <h2>How it works</h2>
 
     <div class='chapter'>

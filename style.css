@@ -1,0 +1,59 @@
+.container {
+  width: 960;
+  margin-left: 10px;
+}
+
+body {
+
+  font-size: 14px;
+  line-height: 22px;
+  font-family: Helvetica Neue, Helvetica, Arial;
+}
+
+.chapter {
+  margin-left: 6px;
+  padding-bottom: 10px;
+
+  border-bottom: 1px solid gray;
+  /*border-left: 1px solid #cccccc;*/
+}
+
+h2 {
+  padding-top: 10px;
+}
+
+.heading {
+  width: 100%;
+}
+
+.heading .center {
+  margin-left: auto;
+  margin-right: auto;
+  width: 500px;
+}
+
+p {
+  padding-left: 6px
+}
+
+pre, .code {
+  font-size: 12px;
+  padding: 6px 0 2px 0px;
+  border: 1px solid #cccccc;
+  border-left-width: 6px;
+  margin: 0px 0 30px;
+}
+
+.docs {
+  float: left;
+  width: 600px;
+  padding: 20px;
+  padding-right: 30px;
+}
+
+.summary {
+  float: right;
+  width: 260px;
+  padding: 20px 0 20 40;
+}
+

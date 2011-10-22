@@ -1,1 +1,164 @@
-My GitHub Page
+<head>
+  <link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<div class='container'>
+  <div class='heading'>
+    <div class='center'>
+      <img src='images/heading-2.png'/>
+    </div>
+  </div>
+  <div class='docs'>
+
+    <h2>Get the Code</h2>
+
+    <div class='chapter'>
+
+      <p>It's not quite ready, v0.1.0 to be release this week</p>
+    </div>
+    <h2>Installation</h2>
+
+    <div class='chapter'>
+
+      <p>Like any other js file, just include chiropractor in html, after Backbone (and underscore) are included.</p>
+      <xmp class='code'>
+        <script src='path/to/js_files/chiropractor.js' type='javscript'/>
+      </xmp>
+    </div>
+    <h2>Initializing</h2>
+
+    <div class='chapter'>
+      <p>There are two ways to initialize Chriropractor in your application</p>
+      <pre>
+        chiropractor.all(defaultCode, validCodes, genericHandlers)
+      </pre>
+      <p>and</p>
+      <pre>
+        chiropractor.each(defaultCode, validCodes, genericHandlers)
+      </pre>
+      <p>The difference is simple.
+
+      <p>
+      <ul>
+        <li>All: will override all Models and Collection, leaving you only to worry about errors
+          you don't want Chiropractor to handle.
+        </li>
+        <li>Each: will do nothing until the model is passed to chiropractor thrrough #use, or an explicit call to
+          chiropractor.oneOff
+        </li>
+      </ul>
+
+      <p>
+        Regardless of using all or each the initialization is the same. We initialize as follows:
+      </p>
+
+    <pre>
+      var defaultCode = 500;
+      var validCodes = [400, 404, 422, 500];
+      var genericHandlers = {
+      404: function (model, resp, options) {
+        //Do Something
+      },
+      500: function (model, resp, options) {
+        //Do Something else
+      }
+    }
+      chiropractor.all(defaultCode, validCodes, genericHandlers) //OR
+      chiropractor.each(defaultCode, validCodes, genericHandlers)
+    </pre>
+      <h3>defaultCode</h3>
+
+      <p>There are 2 cases where this is used: when chiropractor doesn't know to handle a code (see validCodes), or when
+        there is no handler for that code</p>
+
+      <h3>validCodes</h3>
+
+      <p>This is an array of codes that you want Chiropractor to keep and eye out for. This must be a comprehensive list
+        of
+        any handlers declared in your application</p>
+
+      <h3>genericHandlers</h3>
+
+      <p>
+        These are the default handlers that Chiropractor will use for particular error codes when there is not a
+        specific
+        handler declared for that call.
+        It is an object, with each property being a mapping between a status code, and the corresponding default
+        behaviour
+        for that case
+      </p>
+    </div>
+    <!--<h2>Chiropractor.all</h2>-->
+    <h2>chiropractor.each</h2>
+
+    <div class='chapter'>
+      <p>By default each will not touch your models or collections. To use it, there are two ways:</p>
+
+      <h3>1. chiropractor.use(model)</h3>
+  <pre>
+    chiropractor.use(model)
+  </pre>
+      <p>By passing in the model, Chiropractor will work its magic on the model.
+        This can be done anywhere in your application (as long as the model has been created), but is my suggestion that
+        this is done in the view (as it is likely that your error handling is DOM related behaviour)</p>
+
+      <h3>2. chiropractor.oneOff()</h3>
+
+      <p>Not yet implemented</p>
+    </div>
+
+
+    <h2>Usage - specific handlers</h2>
+
+
+    <div class='chapter'>
+
+      <p>Now, when you make a server call, you can pass an the different behaviours you require, depending on the status
+        code.
+        For example:</p>
+
+<pre>
+  model.save({}, {
+    success: function () {
+      //Do standard success callback
+    },
+    420: function () {
+      //Do something specific
+    }
+  });
+</pre>
+      Specific handlers (i.e. those declared at the point of the server call) will be called instead of
+      any default behaviour declared in the chiropractor.init.
+
+
+    </div>
+    <h2>Affected Method</h2>
+
+    <div class='chapter'>
+      <p>Chiropractor will modify the following methods</p>
+      <ul>
+        <li>Backbone.Model#save</li>
+        <li>Backbone.Model#fetch</li>
+        <li>Backbone.Model#destroy</li>
+        <li>Backbone.Collection#fetch</li>
+
+      </ul>
+
+    </div>
+    <h2>How it works</h2>
+
+    <div class='chapter'>
+      <p>Basically, Chiropractor will override the server call methods on the models and collection to build a smart
+        error
+        handler.
+        For more information, <a href='http://www.github.com/pjmurray/chiropractor'>look at the repo</a></p>
+    </div>
+  </div>
+  <div class='summary'>
+    <!--<h2>Method Summary</h2>-->
+    <!---->
+    <!--<h3>Initialization</h3>-->
+    <!---->
+    <!--<h3>Use with chiropractor.use</h3>-->
+  </div>
+
+</div>
